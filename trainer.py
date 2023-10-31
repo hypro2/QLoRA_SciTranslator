@@ -14,7 +14,8 @@ def main(model_id, tokenizer_id=None):
 
     if tokenizer_id is None:
         tokenizer_id = model_id
-
+        
+    # peft model setting
     model = AutoModelForCausalLM.from_pretrained(model_id,
                                                  return_dict=True,
                                                  torch_dtype=torch.float16,
@@ -36,15 +37,19 @@ def main(model_id, tokenizer_id=None):
     model = get_peft_model(model, config)
     model.print_trainable_parameters()
 
+    # load_dataset
+    
     with open('./translation_data_science.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
-
     split_data = []
     for i in range(len(data)):
         split_data.append(prompt_chat_completion(data[i]['conversations']))
-
     custom_dataset = CustomDataset(split_data, tokenizer, 4096)
-    tokenizer.pad_token = tokenizer.eos_token
+
+    # trainer setting 
+    
+    tokenizer.pad_token = tokenizer.eos_token # llama2 만약에 eos token으로 하면 계속 생성하는 isssue !!! 
+    
     trainer = Trainer(
         model=model,
         train_dataset=custom_dataset,
@@ -52,7 +57,7 @@ def main(model_id, tokenizer_id=None):
             per_device_train_batch_size=1,
             gradient_accumulation_steps=4,
             warmup_steps=2,
-            max_steps=20,
+            max_steps=1000,
             learning_rate=3e-4,
             fp16=True,
             logging_steps=1,
@@ -65,6 +70,3 @@ def main(model_id, tokenizer_id=None):
     model.config.use_cache = False
     trainer.train()
     trainer.save_model("./save_lora_dir")
-
-if __name__=="__main__":
-    main(os.path.join(gv.ROOT_PATH, f"llm_model/KO-Platypus2-7B-ex/"))
