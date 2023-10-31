@@ -1,6 +1,28 @@
-# llama_translator_koen(임시)
+# llama_science_translator_ko(임시)
 
 학습 진행 중
+```
+{
+  "auto_mapping": null,
+  "bias": "none",
+  "fan_in_fan_out": false,
+  "inference_mode": true,
+  "init_lora_weights": true,
+  "layers_pattern": null,
+  "layers_to_transform": null,
+  "lora_alpha": 16,
+  "lora_dropout": 0.05,
+  "modules_to_save": null,
+  "peft_type": "LORA",
+  "r": 64,
+  "revision": null,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "task_type": "CAUSAL_LM"
+}
+```
 
 ![image](https://github.com/hypro2/llama_translator_koen/assets/84513149/13ef97cc-27e8-4008-8d2d-95d513df6342)
 
