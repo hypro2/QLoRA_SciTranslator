@@ -1,6 +1,6 @@
 # llama_science_translator_ko(임시)
 
-학습 진행 중
+llama2 7b ko 기반 모델 학습 진행 중
 ```
 {
   "auto_mapping": null,
